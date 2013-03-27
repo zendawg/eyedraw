@@ -2423,8 +2423,15 @@ ED.Doodle = function(_drawing, _originX, _originY, _radius, _apexX, _apexY, _sca
             this.isForDrawing = false;
 		}
         
-        // Optional rray of squiggles
-        this.squiggleArray = new Array();
+                /* some doodles, like Peripapillary Atrophy and Optic Disk,
+                 * create their own squiggle array in setParameterDefaults,
+                 * called before this method; so only create a squiggle array
+                 * if there's not one already present:
+                 */
+                if (this.squiggleArray == null) {
+                    // Optional array of squiggles
+                    this.squiggleArray = new Array();
+                }
 		
 		// Transform used to draw doodle (includes additional transforms specific to the doodle)
 		this.transform = new ED.AffineTransform();

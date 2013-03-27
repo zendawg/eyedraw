@@ -1291,13 +1291,6 @@ ED.PeripapillaryAtrophy = function(_drawing, _originX, _originY, _radius, _apexX
 	
 	// Set classname
 	this.className = "PeripapillaryAtrophy";
-
-    
-    // Create a squiggle to store the four corner points
-    var squiggle = new ED.Squiggle(this, new ED.Colour(100, 100, 100, 1), 4, true);
-    
-    // Add it to squiggle array
-    this.squiggleArray.push(squiggle);
     
     // Add four points to the squiggle
     this.addPointToSquiggle(new ED.Point(-this.radius - 100, 0));
@@ -1355,6 +1348,12 @@ ED.PeripapillaryAtrophy.prototype.setPropertyDefaults = function()
 ED.PeripapillaryAtrophy.prototype.setParameterDefaults = function()
 {
     this.radius = 340;
+    // Create a squiggle to store the four corner points
+    var squiggle = new ED.Squiggle(this, new ED.Colour(100, 100, 100, 1), 4, true);
+    
+    // Add it to squiggle array
+    this.squiggleArray = new Array();
+    this.squiggleArray.push(squiggle);
 }
 
 /**
@@ -1524,12 +1523,6 @@ ED.OpticDisk = function(_drawing, _originX, _originY, _radius, _apexX, _apexY, _
 	
 	// Set classname
 	this.className = "OpticDisk";
-    
-    // Create a squiggle to store the handles points
-    var squiggle = new ED.Squiggle(this, new ED.Colour(100, 100, 100, 1), 4, true);
-    
-    // Add it to squiggle array
-    this.squiggleArray.push(squiggle);
 
     // Flag to simplify sizing of cup
     this.isBasic = true;
@@ -1593,6 +1586,13 @@ ED.OpticDisk.prototype.setParameterDefaults = function()
     this.rangeOfRadius = new ED.Range(50, 280);
     this.rangeOfApexY = new ED.Range(-280, -20);
     */
+   // Create a squiggle to store the handles points
+    var squiggle = new ED.Squiggle(this, new ED.Colour(100, 100, 100, 1), 4, true);
+    
+    // Add it to squiggle array
+    this.squiggleArray = new Array();
+    this.squiggleArray.push(squiggle);
+
 }
 
 /**
