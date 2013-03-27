@@ -1156,8 +1156,7 @@ ED.AngleGrade.prototype.getParameter = function(_parameter)
              if (-this.apexY >= rsli) returnValue = "0";
             else if (-this.apexY >= rtmo) returnValue = "1";
             else if (-this.apexY >= rcbo) returnValue = "2";
-            else if (-this.apexY >= rtmo) returnValue = "3";
-            else if (-this.apexY >= rtmo) returnValue = "4";
+            else if (-this.apexY >= riro) returnValue = "3";
 
             break;
 
