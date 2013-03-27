@@ -1292,11 +1292,18 @@ ED.PeripapillaryAtrophy = function(_drawing, _originX, _originY, _radius, _apexX
 	// Set classname
 	this.className = "PeripapillaryAtrophy";
     
-    // Add four points to the squiggle
-    this.addPointToSquiggle(new ED.Point(-this.radius - 100, 0));
-    this.addPointToSquiggle(new ED.Point(0, -this.radius));
-    this.addPointToSquiggle(new ED.Point(this.radius, 0));
-    this.addPointToSquiggle(new ED.Point(0, this.radius));
+    if (this.drawing.eye == ED.eye.Right) {
+        this.addPointToSquiggle(new ED.Point(-this.radius - 100, 0));
+        this.addPointToSquiggle(new ED.Point(0, -this.radius));
+        this.addPointToSquiggle(new ED.Point(this.radius, 0));
+        this.addPointToSquiggle(new ED.Point(0, this.radius));
+    } else {
+        this.addPointToSquiggle(new ED.Point(-this.radius, 0));
+        this.addPointToSquiggle(new ED.Point(0, -this.radius));
+        this.addPointToSquiggle(new ED.Point(this.radius + 100, 0));
+        this.addPointToSquiggle(new ED.Point(0, this.radius));
+    }
+
 }
 
 /**
@@ -1512,8 +1519,9 @@ ED.PeripapillaryAtrophy.prototype.description = function()
  * @param {Float} _arc
  * @param {Float} _rotation
  * @param {Int} _order
+ * @param {Boolean} _isBasic
  */
-ED.OpticDisk = function(_drawing, _originX, _originY, _radius, _apexX, _apexY, _scaleX, _scaleY, _arc, _rotation, _order)
+ED.OpticDisk = function(_drawing, _originX, _originY, _radius, _apexX, _apexY, _scaleX, _scaleY, _arc, _rotation, _order, _isBasic)
 {
     // Number of handles (set before superclass call because superclass calles setHandles())
     this.numberOfHandles = 8;
@@ -1523,12 +1531,12 @@ ED.OpticDisk = function(_drawing, _originX, _originY, _radius, _apexX, _apexY, _
 	
 	// Set classname
 	this.className = "OpticDisk";
-
-    // Flag to simplify sizing of cup
-    this.isBasic = true;
-    
-    // Toggle function loads points if required
-    this.setHandleProperties();
+    if (_isBasic == null) {
+        this.isBasic = true;
+    } else {
+        this.isBasic = _isBasic;
+    }
+    this.setHandles(this.isBasic);
 }
 
 /**
@@ -1540,17 +1548,27 @@ ED.OpticDisk.superclass = ED.Doodle.prototype;
 
 /**
  * Sets handle attributes
+ *  
+ * @property {Bool} _isBasic are the handles simple or advanced? If unset or
+ * true, only one handle will be drawn; otherwise all handles will be drawn.
  */
-ED.OpticDisk.prototype.setHandles = function()
+ED.OpticDisk.prototype.setHandles = function(_isBasic)
 {
+    var visible = false;
+    if (_isBasic == true) {
+        visible = true;
+    }
+    // Add it to squiggle array
+    this.handleArray = new Array();
+
     // Array of handles for expert mode
     for (var i = 0; i < this.numberOfHandles; i++)
     {
-        this.handleArray[i] = new ED.Handle(null, true, ED.Mode.Handles, false);
+        this.handleArray[i] = new ED.Handle(null, !visible, ED.Mode.Handles, false);
     }
     
     // Apex handle for basic mode
-    this.handleArray[this.numberOfHandles] = new ED.Handle(null, true, ED.Mode.Apex, false);
+    this.handleArray[this.numberOfHandles] = new ED.Handle(null, visible, ED.Mode.Apex, false);
 }
 
 /**
@@ -1592,6 +1610,9 @@ ED.OpticDisk.prototype.setParameterDefaults = function()
     // Add it to squiggle array
     this.squiggleArray = new Array();
     this.squiggleArray.push(squiggle);
+    // Toggle function, loads points if required
+    this.setHandleProperties();
+
 
 }
 
@@ -1846,8 +1867,14 @@ ED.OpticDisk.prototype.toggleMode = function()
  */
 ED.OpticDisk.prototype.setHandleProperties = function()
 {
-    // Going from basic to expert
-    if (!this.isBasic)
+    // Make handles visible, except for apex handle
+
+    if (this.handleArray == null) {
+        this.setHandles();
+    }
+     // Going from basic to expert
+    if (this.isBasic != null && !this.isBasic)
+
     {
         // Clear array
         this.squiggleArray[0].pointsArray.length = 0;
@@ -1878,6 +1905,15 @@ ED.OpticDisk.prototype.setHandleProperties = function()
         }
         this.handleArray[this.numberOfHandles].isVisible = true;        
     }
+}
+
+/**
+ * Add in whether the disk is basic or not (that is, has only one handle
+ * or multiple handles).
+ */
+ED.OpticDisk.prototype.jsonBody = function()
+{
+    return ED.Doodle.prototype.jsonBody(this) + ', "isBasic": ' + this.isBasic;
 }
 
 /**

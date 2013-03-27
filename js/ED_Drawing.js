@@ -440,7 +440,8 @@ ED.Drawing.prototype.load = function(_doodleSet)
          _doodleSet[i].scaleY,
          _doodleSet[i].arc,
          _doodleSet[i].rotation,
-         _doodleSet[i].order
+         _doodleSet[i].order,
+         _doodleSet[i].isBasic
          );
         
 		this.doodleArray[i].id = i;
@@ -2491,12 +2492,22 @@ ED.Doodle = function(_drawing, _originX, _originY, _radius, _apexX, _apexY, _sca
         this.pointsArray = new Array();
         
 		// Array of 5 handles
-		this.handleArray = new Array();
-		this.handleArray[0] = new ED.Handle(new ED.Point(-50, 50), false, ED.Mode.Scale, false);
-		this.handleArray[1] = new ED.Handle(new ED.Point(-50, -50), false, ED.Mode.Scale, false);
-		this.handleArray[2] = new ED.Handle(new ED.Point(50, -50), false, ED.Mode.Scale, false);
-		this.handleArray[3] = new ED.Handle(new ED.Point(50, 50), false, ED.Mode.Scale, false);
-		this.handleArray[4] = new ED.Handle(new ED.Point(this.apexX, this.apexY), false, ED.Mode.Apex, false);
+                
+                /* Optic Disk creates it's own handle array in another method;
+                 * so only create a handle array if there's not one already
+                 * present:
+                 */
+                if (this.handleArray == null) {
+                    // Optional array of handles
+               
+                    this.handleArray = new Array();
+                    this.handleArray[0] = new ED.Handle(new ED.Point(-50, 50), false, ED.Mode.Scale, false);
+                    this.handleArray[1] = new ED.Handle(new ED.Point(-50, -50), false, ED.Mode.Scale, false);
+                    this.handleArray[2] = new ED.Handle(new ED.Point(50, -50), false, ED.Mode.Scale, false);
+                    this.handleArray[3] = new ED.Handle(new ED.Point(50, 50), false, ED.Mode.Scale, false);
+                    this.handleArray[4] = new ED.Handle(new ED.Point(this.apexX, this.apexY), false, ED.Mode.Apex, false);
+                }
+
 		this.setHandles();
         
         // Extremities
@@ -3137,32 +3148,39 @@ ED.Doodle.prototype.calculateArc = function()
  */
 ED.Doodle.prototype.json = function()
 {
-	var s = '{';
-    s = s + '"subclass": ' + '"' + this.className + '", '
-    s = s + '"originX": ' + this.originX.toFixed(0) + ', '
-    s = s + '"originY": ' + this.originY.toFixed(0) + ', '
-    s = s + '"radius": ' + this.radius.toFixed(0) + ', '
-    s = s + '"apexX": ' + this.apexX.toFixed(0) + ', '
-    s = s + '"apexY": ' + this.apexY.toFixed(0) + ', '
-    s = s + '"scaleX": ' + this.scaleX.toFixed(2) + ', '
-    s = s + '"scaleY": ' + this.scaleY.toFixed(2) + ', '
-    s = s + '"arc": ' + (this.arc * 180/Math.PI).toFixed(0)  + ', '
-    s = s + '"rotation": ' + (this.rotation * 180/Math.PI).toFixed(0) + ', '
-    s = s + '"order": ' + this.order.toFixed(0) + ', '
-    
-    s = s + '"squiggleArray": ['; 
-    for (var j = 0; j < this.squiggleArray.length-1; j++)
-    {
-        s = s + this.squiggleArray[j].json() + ', ';
-    }
-    if (this.squiggleArray.length > 0) {
-        s = s + this.squiggleArray[this.squiggleArray.length -1].json();
-    }
-    s = s + ']';
-    s = s + '}';
-    
-    return s;
+	return '{' + this.jsonBody(this) + '}';
 }
+
+/**
+ * Wrapper body to enable subclasses to add their own members, if need be.
+ * Be sure to call this method within your own overriding method.
+ */
+ED.Doodle.prototype.jsonBody = function(_this)
+{
+       var s = '"subclass": ' + '"' + _this.className + '", '
+               s = s + '"originX": ' + _this.originX.toFixed(0) + ', '
+               s = s + '"originY": ' + _this.originY.toFixed(0) + ', '
+               s = s + '"radius": ' + _this.radius.toFixed(0) + ', '
+               s = s + '"apexX": ' + _this.apexX.toFixed(0) + ', '
+               s = s + '"apexY": ' + _this.apexY.toFixed(0) + ', '
+               s = s + '"scaleX": ' + _this.scaleX.toFixed(2) + ', '
+               s = s + '"scaleY": ' + _this.scaleY.toFixed(2) + ', '
+               s = s + '"arc": ' + (_this.arc * 180/Math.PI).toFixed(0)  + ', '
+               s = s + '"rotation": ' + (_this.rotation * 180/Math.PI).toFixed(0) + ', '
+               s = s + '"order": ' + _this.order.toFixed(0) + ', '
+                
+                s = s + '"squiggleArray": ['; 
+                for (var j = 0; j < _this.squiggleArray.length-1; j++)
+                 {
+                    s = s + _this.squiggleArray[j].json() + ', ';
+                 }
+                if (_this.squiggleArray.length > 0) {
+                    s = s + _this.squiggleArray[_this.squiggleArray.length -1].json();
+                 }
+                s = s + ']';
+                return s;
+ }
+
 
 /**
  * Draws a circular spot with given parameters
