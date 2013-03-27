@@ -1150,6 +1150,15 @@ ED.AngleGrade.prototype.getParameter = function(_parameter)
     
     switch (_parameter)
     {
+        case 'grade-schaffer':
+             // Return value uses SCHEIE classificaton
+            returnValue = "IV";
+            if (-this.apexY >= rsli) returnValue = "0";
+            else if (-this.apexY >= rtmo) returnValue = "I";
+            else if (-this.apexY >= rcbo) returnValue = "II";
+            else if (-this.apexY >= riro) returnValue = "III";
+            break;
+
         case 'grade':
             // Return value uses SCHEIE classificaton
             returnValue = "O";
@@ -1176,6 +1185,29 @@ ED.AngleGrade.prototype.setParameter = function(_parameter, _value)
 {
     switch (_parameter)
     {
+        case 'grade-schaffer':
+            switch (_value)
+            {
+                case '0':
+                    this.apexY = -rsli;
+                    break;
+                case 'I':
+                    this.apexY = -rtmo;
+                    break;
+                case 'II':
+                    this.apexY = -rcbo;
+                    break;
+                case 'III':
+                    this.apexY = -riro;
+                    break;
+                case 'IV':
+                    this.apexY = -riri;
+                    break;
+                default:
+                    this.apexY = -riri;
+                    break;
+            }
+            break;
         case 'grade':
             switch (_value)
             {
