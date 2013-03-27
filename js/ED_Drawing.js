@@ -115,7 +115,7 @@ ED.findOffset = function(obj, curleft, curtop)
             curleft += obj.offsetLeft;
             curtop += obj.offsetTop;
         } while (obj = obj.offsetParent);
-        return { x: curleft, y: curtop };
+        return {x: curleft, y: curtop};
     }
 }
 
@@ -323,7 +323,7 @@ ED.Drawing = function(_canvas, _eye, _IDSuffix, _isEditable, offset_x, offset_y,
         
         
         // Stop browser stealing double click to select text
-        this.canvas.onselectstart = function () { return false; }
+        this.canvas.onselectstart = function () {return false;}
     }
 }
 
@@ -3144,9 +3144,12 @@ ED.Doodle.prototype.json = function()
     s = s + '"order": ' + this.order.toFixed(0) + ', '
     
     s = s + '"squiggleArray": ['; 
-    for (var j = 0; j < this.squiggleArray.length; j++)
+    for (var j = 0; j < this.squiggleArray.length-1; j++)
     {
         s = s + this.squiggleArray[j].json() + ', ';
+    }
+    if (this.squiggleArray.length > 0) {
+        s = s + this.squiggleArray[this.squiggleArray.length -1].json();
     }
     s = s + ']';
     s = s + '}';
@@ -3696,9 +3699,13 @@ ED.Squiggle.prototype.json = function()
     s = s + '"filled": "' + this.filled + '", ';
     
     s = s + '"pointsArray": [';
-    for (var i = 0; i < this.pointsArray.length; i++)
-	{
-        s = s + this.pointsArray[i].json() + ', ';
+    
+    for (var j = 0; j < this.pointsArray.length-1; j++)
+    {
+        s = s + this.pointsArray[j].json() + ', ';
+    }
+    if (this.pointsArray.length > 0) {
+        s = s + this.pointsArray[this.pointsArray.length -1].json();
     }
     s = s + ']';
     s = s + '}';
