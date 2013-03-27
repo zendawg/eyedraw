@@ -1152,11 +1152,13 @@ ED.AngleGrade.prototype.getParameter = function(_parameter)
     {
         case 'grade-schaffer':
              // Return value uses SCHEIE classificaton
-            returnValue = "IV";
-            if (-this.apexY >= rsli) returnValue = "0";
-            else if (-this.apexY >= rtmo) returnValue = "I";
-            else if (-this.apexY >= rcbo) returnValue = "II";
-            else if (-this.apexY >= riro) returnValue = "III";
+            returnValue = "4";
+             if (-this.apexY >= rsli) returnValue = "0";
+            else if (-this.apexY >= rtmo) returnValue = "1";
+            else if (-this.apexY >= rcbo) returnValue = "2";
+            else if (-this.apexY >= rtmo) returnValue = "3";
+            else if (-this.apexY >= rtmo) returnValue = "4";
+
             break;
 
         case 'grade':
@@ -1176,6 +1178,29 @@ ED.AngleGrade.prototype.getParameter = function(_parameter)
 }
 
 /**
+ * Returns a String which, if not empty, determines the root descriptions of multiple instances of the doodle
+ *
+ * @returns {String} Group description
+ */
+ED.AngleGrade.prototype.description = function()
+{
+    // Calculate total extent in degrees
+    var grade = this.getParameter('grade-schaffer');
+    
+    var rot = this.rotation.toFixed(2);
+    // Return string
+    var side = "top";
+    if (rot == 1.57) {
+        side = "right";
+    } else if (rot == -1.57) {
+        side = "left";
+    } else if (rot == 3.14) {
+        side = "bottom";
+    }
+    return side + " grade " + grade.toString();
+}
+
+/**
  * Sets derived parameters for this doodle
  *
  * @param {String} _parameter Name of parameter
@@ -1183,24 +1208,30 @@ ED.AngleGrade.prototype.getParameter = function(_parameter)
  */
 ED.AngleGrade.prototype.setParameter = function(_parameter, _value)
 {
+    var _index = _value;
+    if (_parameter == 'grade-schaffer') {
+        // text from UI starts with number then detail of degrees follows:
+        _index = _value.substr(0, 1);
+    }
+
     switch (_parameter)
     {
         case 'grade-schaffer':
-            switch (_value)
+            switch (_index)
             {
                 case '0':
                     this.apexY = -rsli;
                     break;
-                case 'I':
+                case '1':
                     this.apexY = -rtmo;
                     break;
-                case 'II':
+                case '2':
                     this.apexY = -rcbo;
                     break;
-                case 'III':
+                case '3':
                     this.apexY = -riro;
                     break;
-                case 'IV':
+                case '4':
                     this.apexY = -riri;
                     break;
                 default:
