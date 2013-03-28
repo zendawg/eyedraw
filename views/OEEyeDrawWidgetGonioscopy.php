@@ -128,11 +128,9 @@
         </div>
     <?php } ?>
     <canvas id="<?php echo $canvasId?>" class="<?php if ($isEditable) { echo 'edit'; } else { echo 'display'; }?>" width="<?php echo $size?>" height="<?php echo $size?>" tabindex="1"<?php if ($canvasStyle) {?> style="<?php echo $canvasStyle?>"<?php }?>></canvas>
-    
                     <?php if ($isEditable) { ?>
         <div class="eyedrawFields">
             <div>
-                <div class="aligned">
                     <div class="label">
     <?php echo 'Level' ?>:
                     </div>
@@ -155,10 +153,11 @@
                     <div class="label">
                         <a href="javascript:void(0);" title="" onClick="showPop('vanHerickPNG<?php echo ucfirst($side) ?>')">Foster images</a>
                     </div>
-    <?php
-    $path = YiiBase::getPathOfAlias('application.modules.OphCiExamination.assets');
-    $assetUrl = Yii::app()->assetManager->publish($path);
-    ?>
+                    <?php
+                    $path = YiiBase::getPathOfAlias('application.modules.OphCiExamination.assets');
+                    $assetUrl = Yii::app()->assetManager->publish($path);
+                    $modelName = $model->elementType->class_name;
+                    ?>
                     <div style="display:none; z-index:100; position:absolute; margin-top: -200px" id='<?php echo 'vanHerickPNG' . ucfirst($side) ?>' class="popup" title="Click an area of image to select result">
                         <img usemap="#pickmapL" width=450 src="<?php echo $assetUrl ?>/img/gonioscopy.png">
                         <map name="pickmapL">
@@ -200,4 +199,4 @@
     <?php } ?>
             </div>
 <?php } ?>
-</div>
+    </div>
