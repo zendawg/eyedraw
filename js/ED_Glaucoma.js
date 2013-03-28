@@ -1527,7 +1527,7 @@ ED.OpticDisk = function(_drawing, _originX, _originY, _radius, _apexX, _apexY, _
     this.numberOfHandles = 8;
     
 	// Call superclass constructor
-	ED.Doodle.call(this, _drawing, _originX, _originY, _radius, _apexX, _apexY, _scaleX, _scaleY, _arc, _rotation, _order);
+	ED.Doodle.call(this, _drawing, _originX, _originY, _radius, _apexX, _apexY, _scaleX, _scaleY, _arc, _rotation, _order, _isBasic);
 	
 	// Set classname
 	this.className = "OpticDisk";
