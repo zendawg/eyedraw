@@ -47,8 +47,10 @@
         
     function showPop(id)
     {
-        document.getElementById(id).style.visibility = "visible";
-        document.getElementById(id).style.display = "inline";
+        if (document.getElementById(id) != null) {
+            document.getElementById(id).style.visibility = "visible";
+            document.getElementById(id).style.display = "inline";
+        }
     }
 		
     function hidePop(id)
@@ -59,6 +61,9 @@
 		
     function changeGonioscopyLevel(_value, _side)
     {
+        if (document.getElementById(_value) == null) {
+            return;
+        }
         // Set flag indicating level
         if (_value == 'Basic') {
             isBasic = true;
@@ -85,7 +90,7 @@
             id.selectedDoodle = doodles[i];
             if (id.selectedDoodle.className == 'AngleGrade') {
                 id.setParameterForDoodle(
-                    id.selectedDoodle, 'grade-schaffer', sel.options[sel.selectedIndex].text);
+                id.selectedDoodle, 'grade-schaffer', sel.options[sel.selectedIndex].text);
             }
         }
     }
@@ -122,88 +127,77 @@
             </div>
         </div>
     <?php } ?>
-    <canvas id="<?php echo $canvasId ?>" class="<?php
-    if ($isEditable) {
-        echo 'edit';
-    } else {
-        echo 'display';
-    }
-    ?>" width="<?php echo $size ?>" height="<?php echo $size ?>" tabindex="1"<?php if ($canvasStyle) { ?> style="<?php echo $canvasStyle ?>"<?php } ?>></canvas>
-            <?php if ($isEditable) { ?>
+    <canvas id="<?php echo $canvasId?>" class="<?php if ($isEditable) { echo 'edit'; } else { echo 'display'; }?>" width="<?php echo $size?>" height="<?php echo $size?>" tabindex="1"<?php if ($canvasStyle) {?> style="<?php echo $canvasStyle?>"<?php }?>></canvas>
+    
+                    <?php if ($isEditable) { ?>
         <div class="eyedrawFields">
             <div>
                 <div class="aligned">
                     <div class="label">
-                        <?php echo 'Level' ?>:
+    <?php echo 'Level' ?>:
                     </div>
                     <div class="data">
-                        <select style="width: auto; margin-bottom:5px;" onchange="changeGonioscopyLevel(this.value, '<?php echo $side?>');">
+                        <select style="width: auto; margin-bottom:5px;" onchange="changeGonioscopyLevel(this.value, '<?php echo $side ?>');">
                             <option>Basic</option>
                             <option>Expert</option>
                         </select>
                     </div>
                 </div>
-                <?php
-                $foo = $inputId;
-                $modelName = $model->elementType->class_name
-                ?>
-                <div class="aligned" id="van_herick_<?php echo $inputId?>">
+                <div class="aligned" id="van_herick_<?php echo $inputId ?>">
                     <div class="label">
-                        <?php echo $model->getAttributeLabel('van_herick_' . $side); ?>:
+    <?php echo $model->getAttributeLabel('van_herick_' . $side); ?>:
                     </div>
                     <div class="data">
-                        <?php echo CHtml::activeDropDownList($model, 'van_herick_' . $side, $model->getVanHerickOptions()) ?>
+    <?php echo CHtml::activeDropDownList($model, 'van_herick_' . $side, $model->getVanHerickOptions()) ?>
                     </div>
                 </div>
-                <div class="aligned"  id="foster_images_<?php echo $side?>">
+                <div class="aligned"  id="foster_images_<?php echo $side ?>">
                     <div class="label">
-                        <a href="javascript:void(0);" title="" onClick="showPop('vanHerickPNG<?php echo ucfirst($side)?>')">Foster images</a>
+                        <a href="javascript:void(0);" title="" onClick="showPop('vanHerickPNG<?php echo ucfirst($side) ?>')">Foster images</a>
                     </div>
-                    <?php
-                    $path=YiiBase::getPathOfAlias('application.modules.OphCiExamination.assets');
-                    $assetUrl = Yii::app()->assetManager->publish($path);
-                    ?>
-                    <div style="display:none; z-index:100; position:absolute; margin-top: -200px" id='<?php echo 'vanHerickPNG' . ucfirst($side)?>' class="popup" title="Click an area of image to select result">
-                        <img usemap="#pickmapL" width=450 src="<?php echo $assetUrl?>/img/gonioscopy.png">
+    <?php
+    $path = YiiBase::getPathOfAlias('application.modules.OphCiExamination.assets');
+    $assetUrl = Yii::app()->assetManager->publish($path);
+    ?>
+                    <div style="display:none; z-index:100; position:absolute; margin-top: -200px" id='<?php echo 'vanHerickPNG' . ucfirst($side) ?>' class="popup" title="Click an area of image to select result">
+                        <img usemap="#pickmapL" width=450 src="<?php echo $assetUrl ?>/img/gonioscopy.png">
                         <map name="pickmapL">
-                            <area style="cursor:pointer" shape="rect" coords="0,0,225,225" onclick="popupSelect(5, '<?php echo $modelName ?>_van_herick_<?php echo $side?>', 'vanHerickPNG<?php echo ucfirst($side)?>');" />
-                            <area style="cursor:pointer" shape="rect" coords="0,225,225,450" onclick="popupSelect(15, '<?php echo $modelName?>_van_herick_<?php echo $side?>', 'vanHerickPNG<?php echo ucfirst($side)?>');" />
-                            <area style="cursor:pointer" shape="rect" coords="0,450,225,675" onclick="popupSelect(25, '<?php echo $modelName?>_van_herick_<?php echo $side?>', 'vanHerickPNG<?php echo ucfirst($side)?>');" />
-                            <area style="cursor:pointer" shape="rect" coords="225,0,450,225" onclick="popupSelect(30, '<?php echo $modelName?>_van_herick_<?php echo $side?>', 'vanHerickPNG<?php echo ucfirst($side)?>');" />
-                            <area style="cursor:pointer" shape="rect" coords="225,225,450,450" onclick="popupSelect(75, '<?php echo $modelName?>_van_herick_<?php echo $side?>', 'vanHerickPNG<?php echo ucfirst($side)?>');" />
-                            <area style="cursor:pointer" shape="rect" coords="225,450,450,675" onclick="popupSelect(100, '<?php echo $modelName?>_van_herick_<?php echo $side?>', 'vanHerickPNG<?php echo ucfirst($side)?>');" />						                    	</map>
+                            <area style="cursor:pointer" shape="rect" coords="0,0,225,225" onclick="popupSelect(5, '<?php echo $modelName ?>_van_herick_<?php echo $side ?>', 'vanHerickPNG<?php echo ucfirst($side) ?>');" />
+                            <area style="cursor:pointer" shape="rect" coords="0,225,225,450" onclick="popupSelect(15, '<?php echo $modelName ?>_van_herick_<?php echo $side ?>', 'vanHerickPNG<?php echo ucfirst($side) ?>');" />
+                            <area style="cursor:pointer" shape="rect" coords="0,450,225,675" onclick="popupSelect(25, '<?php echo $modelName ?>_van_herick_<?php echo $side ?>', 'vanHerickPNG<?php echo ucfirst($side) ?>');" />
+                            <area style="cursor:pointer" shape="rect" coords="225,0,450,225" onclick="popupSelect(30, '<?php echo $modelName ?>_van_herick_<?php echo $side ?>', 'vanHerickPNG<?php echo ucfirst($side) ?>');" />
+                            <area style="cursor:pointer" shape="rect" coords="225,225,450,450" onclick="popupSelect(75, '<?php echo $modelName ?>_van_herick_<?php echo $side ?>', 'vanHerickPNG<?php echo ucfirst($side) ?>');" />
+                            <area style="cursor:pointer" shape="rect" coords="225,450,450,675" onclick="popupSelect(100, '<?php echo $modelName ?>_van_herick_<?php echo $side ?>', 'vanHerickPNG<?php echo ucfirst($side) ?>');" />						                    	</map>
                     </div>	
                 </div>
 
                 <div class="aligned">
                     <div class="label">
-                        <?php echo $model->getAttributeLabel('gonio_' . $side); ?>:
+    <?php echo $model->getAttributeLabel('gonio_' . $side); ?>:
                     </div>
                     <div class="data">
-                        <?php echo CHtml::activeDropDownList($model, 'gonio_' . $side, $model->getGonioscopyOptions(), array('onchange' => 'setGrade(ed_drawing_edit_' . $side . '_' . $model->elementType->id . ', this)')) ?>
+                    <?php echo CHtml::activeDropDownList($model, 'gonio_' . $side, $model->getGonioscopyOptions(), array('onchange' => 'setGrade(ed_drawing_edit_' . $side . '_' . $model->elementType->id . ', this)')) ?>
                     </div>
                 </div>
 
                 <div class="label">
-                    <?php echo $model->getAttributeLabel($side . '_description'); ?>:
+    <?php echo $model->getAttributeLabel($side . '_description'); ?>:
                 </div>
                 <div class="data">
-                    <?php echo CHtml::activeTextArea($model, $side . '_description', array('rows' => "2", 'cols' => "20", 'class' => 'autosize')) ?>
+            <?php echo CHtml::activeTextArea($model, $side . '_description', array('rows' => "2", 'cols' => "20", 'class' => 'autosize')) ?>
                 </div>
                 <button class="ed_report">Report</button>
                 <button class="ed_clear">Clear</button>
             </div>
-        <?php } else { ?>
+                    <?php } else { ?>
             <div class="eyedrawFields view">
-                <?php if ($description = $model->{$side . '_description'}) { ?>
+    <?php if ($description = $model->{$side . '_description'}) { ?>
                     <div>
                         <div class="data">
-                            <?php echo $description ?>
+                <?php echo $description ?>
                         </div>
                     </div>
-                <?php } ?>
+    <?php } ?>
             </div>
-        <?php } ?>
-
-    </div>
+<?php } ?>
 </div>
