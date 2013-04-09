@@ -61,9 +61,6 @@
 		
     function changeGonioscopyLevel(_value, _side)
     {
-        if (document.getElementById(_value) == null) {
-            return;
-        }
         // Set flag indicating level
         if (_value == 'Basic') {
             isBasic = true;
@@ -71,7 +68,6 @@
         else {
             isBasic = false;
         }
-			
         // Basic level
         if (isBasic) {
             document.getElementById("foster_images_" + _side).style.display = "none";	
@@ -135,7 +131,7 @@
     <?php echo 'Level' ?>:
                     </div>
                     <div class="data">
-                        <select style="width: auto; margin-bottom:5px;" onchange="changeGonioscopyLevel(this.value, '<?php echo $side ?>');">
+                        <select style="width: auto; margin-bottom:5px;" onload="alert('pants');" onchange="changeGonioscopyLevel(this.value, '<?php echo $inputId ?>');">
                             <option>Basic</option>
                             <option>Expert</option>
                         </select>
@@ -149,7 +145,7 @@
     <?php echo CHtml::activeDropDownList($model, 'van_herick_' . $side, $model->getVanHerickOptions()) ?>
                     </div>
                 </div>
-                <div class="aligned"  id="foster_images_<?php echo $side ?>">
+                <div class="aligned"  id="foster_images_<?php echo $inputId ?>">
                     <div class="label">
                         <a href="javascript:void(0);" title="" onClick="showPop('vanHerickPNG<?php echo ucfirst($side) ?>')">Foster images</a>
                     </div>
@@ -200,3 +196,8 @@
             </div>
 <?php } ?>
     </div>
+<script type="text/javascript">
+    
+            document.getElementById("foster_images_<?php echo $inputId ?>").style.display = "none";	
+            document.getElementById("van_herick_<?php echo $inputId ?>").style.display = "none";
+</script>
