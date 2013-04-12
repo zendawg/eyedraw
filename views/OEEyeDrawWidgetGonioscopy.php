@@ -131,7 +131,7 @@
     <?php echo 'Level' ?>:
                     </div>
                     <div class="data">
-                        <select style="width: auto; margin-bottom:5px;" onload="alert('pants');" onchange="changeGonioscopyLevel(this.value, '<?php echo $inputId ?>');">
+                        <select style="width: auto; margin-bottom:5px;" onchange="changeGonioscopyLevel(this.value, '<?php echo $inputId ?>');">
                             <option>Basic</option>
                             <option>Expert</option>
                         </select>
@@ -154,7 +154,7 @@
                     $assetUrl = Yii::app()->assetManager->publish($path);
                     $modelName = $model->elementType->class_name;
                     ?>
-                    <div style="display:none; z-index:100; position:absolute; margin-top: -200px" id='<?php echo 'vanHerickPNG' . ucfirst($side) ?>' class="popup" title="Click an area of image to select result">
+                    <div style="display:none; z-index:100; position:absolute; margin-left: -200px; margin-top: -200px" id='<?php echo 'vanHerickPNG' . ucfirst($side) ?>' class="popup" title="Click an area of image to select result">
                         <img usemap="#pickmapL" width=450 src="<?php echo $assetUrl ?>/img/gonioscopy.png">
                         <map name="pickmapL">
                             <area style="cursor:pointer" shape="rect" coords="0,0,225,225" onclick="popupSelect(5, '<?php echo $modelName ?>_van_herick_<?php echo $side ?>', 'vanHerickPNG<?php echo ucfirst($side) ?>');" />
